@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <conio.h>
-#include <windows.h>
 
+#define BLACK 30
+#define RED 31
+#define GREEN 32
+#define YELLOW 33
+#define BLUE 34
+#define MAGENTA 35
+#define CYAN 36
+#define WHITE 37
 
 typedef struct node{
     char titlu[100], descriere[1000], ingrediente[1000];
@@ -17,8 +23,7 @@ typedef struct list{
 }list;
 
 void set_color(int color_code) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, color_code);
+    printf("\033[1;%dm", color_code);
 }
 
 void citire_fisier(list *l){
@@ -92,17 +97,17 @@ void retete_de_baza(list *l){
 
 void add_to_list(list *l){
     char t[100], d[1000], i[1000];
-    set_color(6);
+    set_color(CYAN);
     printf("Titlu: ");
-    set_color(7);
+    set_color(WHITE);
     fgets(t, sizeof(t), stdin);
-    set_color(6);
+    set_color(CYAN);
     printf("Descriere: ");
-    set_color(7);
+    set_color(WHITE);
     fgets(d, sizeof(d), stdin);
-    set_color(6);
+    set_color(CYAN);
     printf("Ingrediente: ");
-    set_color(7);
+    set_color(WHITE);
     fgets(i, sizeof(i), stdin);
     if(l->head == NULL){
         l->head = malloc(sizeof(node));
@@ -135,56 +140,27 @@ void print_list(list l){
     }
 }
 
-void search(list l){
-    char ts[50], res = NULL;
-    set_color(6);
-    printf("Search: ");
-    set_color(7);
-    scanf("%s", &ts);
-    node *aux;
-    aux = l.head;
-    while(aux != NULL){
-        res = strstr(aux->titlu, ts);
-        if(res != NULL){
-            set_color(6);
-            printf("(%d) ", aux->poz);
-            set_color(7);
-            printf("%s", aux->titlu);
-        }
-        aux = aux->next;
-    }
-    set_color(6);
-    printf("Select a number: ");
-    set_color(7);
-    int nr_nod_cautat = 0;
-    scanf("%d", &nr_nod_cautat);
-
-    find_and_print_node(nr_nod_cautat, l);
-
-    return 0;
-}
-
 void print_node(node *n){
     //printf("==============\nTitlu: %s\nDescriere: %s\nIngrediente: %s\n===============\n", n->titlu, n->descriere, n->ingrediente);
-    set_color(6);
+    set_color(CYAN);
     printf("================\n");
     printf("Titlu: ");
-    set_color(7);
+    set_color(WHITE);
     printf("%s\n", n->titlu);
-    set_color(6);
+    set_color(CYAN);
     printf("Descriere: ");
-    set_color(7);
+    set_color(WHITE);
     printf("%s\n", n->descriere);
-    set_color(6);
+    set_color(CYAN);
     printf("Ingrediente: ");
-    set_color(7);
+    set_color(WHITE);
     printf("%s\n", n->ingrediente);
-    set_color(6);
+    set_color(CYAN);
     printf("================\n");
     int exit;
-    set_color(12);
+    set_color(GREEN);
     printf("Press (c) to continue: ");
-    set_color(7);
+    set_color(WHITE);
     scanf("%d", exit);
 }
 
@@ -194,12 +170,39 @@ void find_and_print_node(int x, list l){
     aux = l.head;
     while(aux != NULL){
         if((int)aux->poz == x){
-            system("cls");
+            system("clear");
             print_node(aux);
             aux = l.last;
         }
         aux = aux->next;
     }
+}
+
+void search(list l){
+    char ts[50], *res = '\0';
+    set_color(CYAN);
+    printf("Search: ");
+    set_color(WHITE);
+    scanf("%s", &ts);
+    node *aux;
+    aux = l.head;
+    while(aux != NULL){
+        res = strstr(aux->titlu, ts);
+        if(res != NULL){
+            set_color(CYAN);
+            printf("(%d) ", aux->poz);
+            set_color(WHITE);
+            printf("%s", aux->titlu);
+        }
+        aux = aux->next;
+    }
+    set_color(CYAN);
+    printf("Select a number: ");
+    set_color(WHITE);
+    int nr_nod_cautat = 0;
+    scanf("%d", &nr_nod_cautat);
+
+    find_and_print_node(nr_nod_cautat, l);
 }
 
 void delete_node(int delete_node_poz, list *l){
@@ -245,66 +248,66 @@ void edit_node(int edit_node_poz, list *l){
     char exit_edit = ' ', choose_edit = ' ';
     while(exit_edit != 'e'){
         choose_edit = ' ';
-        system("cls");
+        system("clear");
         //printf("==============\nTitlu: %s\nDescriere: %s\nIngrediente: %s\n===============\n", aux_edit->titlu, aux_edit->descriere, aux_edit->ingrediente);
         printf("Titlu: ");
-        set_color(7);
+        set_color(WHITE);
         printf("%s\n", aux_edit->titlu);
-        set_color(6);
+        set_color(CYAN);
         printf("Descriere: ");
-        set_color(7);
+        set_color(WHITE);
         printf("%s\n", aux_edit->descriere);
-        set_color(6);
+        set_color(CYAN);
         printf("Ingrediente: ");
-        set_color(7);
+        set_color(WHITE);
         printf("%s\n", aux_edit->ingrediente);
-        set_color(6);
+        set_color(CYAN);
         //printf("Edit this:\n(t) Titlu\n(d) Descriere\n(i) Ingrediente\n(e) Exit edit\nInput:");
         printf("Edit this:\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(t) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Titlu\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(d) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Descriere\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(i) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Ingrediente\n");
-        set_color(4);
+        set_color(RED);
         printf("(e) ");
-        set_color(12);
+        set_color(GREEN);
         printf("Exit edit\n");
-        set_color(6);
+        set_color(CYAN);
         printf("Input: ");
-        set_color(7);
+        set_color(WHITE);
         scanf("%c", &choose_edit);
         exit_edit = choose_edit;
         switch(choose_edit){
             case 't':
-                set_color(6);
+                set_color(CYAN);
                 printf("Noul titlu: ");
-                set_color(7);
+                set_color(WHITE);
                 gets(titlu_edit);
                 gets(titlu_edit);
                 strncat(titlu_edit, "\n", 1);
                 strcpy(aux_edit->titlu, titlu_edit);
                 break;
             case 'd':
-                set_color(6);
+                set_color(CYAN);
                 printf("Noua descriere: ");
-                set_color(7);
+                set_color(WHITE);
                 gets(di_edit);
                 gets(di_edit);
                 strncat(di_edit, "\n", 1);
                 strcpy(aux_edit->descriere, di_edit);
                 break;
             case 'i':
-                set_color(6);
+                set_color(CYAN);
                 printf("Lista noua de ingrediente: ");
-                set_color(7);
+                set_color(WHITE);
                 gets(di_edit);
                 gets(di_edit);
                 strncat(di_edit, "\n", 1);
@@ -340,54 +343,54 @@ int main(){
     citire_fisier(&l);
     int show_list = 0;
     while(1){
-        set_color(6);
+        set_color(CYAN);
         printf("=========================================\n");
-        set_color(7);
+        set_color(WHITE);
         printf("Choose the character in parentheses\n");
-        set_color(6);
+        set_color(CYAN);
         printf("=========================================\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(s) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Search\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(a) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Add\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(d) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Delete\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(e) ");
-        set_color(7);
+        set_color(WHITE);
         printf("Edit node\n");
-        set_color(10);
+        set_color(MAGENTA);
         printf("(l) ");
-        set_color(7);
+        set_color(WHITE);
         if(show_list == 0) printf("Show list\n");
         else printf("Hide list\n");
         if(show_list == 1){
         node *aux;
         aux = l.head;
-        set_color(6);
+        set_color(CYAN);
         if(aux != NULL) printf("\nRetetele culinare:\n\n");
         while(aux != NULL){
-            set_color(10);
+            set_color(MAGENTA);
             printf("(%d) ", aux->poz);
-            set_color(7);
+            set_color(WHITE);
             printf("%s",aux->titlu);
             aux = aux->next;
         }
         }
-        set_color(6);
+        set_color(CYAN);
         printf("\n=========================================\n");
-        set_color(7);
+        set_color(WHITE);
         char selected[3];
         printf("Your choice:");
-        set_color(10);
+        set_color(MAGENTA);
         fgets(selected, sizeof(selected), stdin);
-        set_color(7);
+        set_color(WHITE);
         selected[strcspn(selected, "\n")] = NULL;
         if(strcmp("d", selected) == 0){
             int node_poz;
@@ -416,7 +419,7 @@ int main(){
             }
         strcpy(selected, "x");
 
-        system("cls");
+        system("clear");
         salvare_fisier(&l);
     }
 }
